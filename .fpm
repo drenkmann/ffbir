@@ -1,0 +1,9 @@
+-s dir
+--name ffbir
+--license mit
+--version 0.1.0
+--architecture all
+--description "Fetch all your fetches, but in rust"
+--url "https://github.com/underthefoxtree/ffbir"
+
+target/release/ffbir=/usr/bin/ffbir
