@@ -1,5 +1,14 @@
 use which::which;
 use colored::Colorize;
+use clap::Parser;
+
+#[derive(Parser)]
+#[clap(author, version, about, long_about = None)]
+struct Cli {
+    /// Show only installed fetches
+    #[clap(long = "installed-only", short = 'i', action)]
+    installed_only: bool,
+}
 
 fn fetch_installed(fetch: &str) -> bool {
     which(fetch).is_ok()
@@ -30,19 +39,19 @@ fn main() {
         "wfetch",
     ];
 
+    let args = Cli::parse();
     let mut fetch_count: i8 = 0;
 
     println!("{}\n", "### FetchFetch but in Rust ###".green().bold());
 
     for fetch in &FETCHES {
-        print!("{:>20} ", fetch.on_cyan().black());
 
         if fetch_installed(fetch) {
-            println!("{}", "is installed".green());
+            println!("{:>20} {}", fetch.on_cyan().black(), "is installed".green());
             fetch_count += 1;
         }
-        else {
-            println!("{}", "is not installed".red());
+        else if !args.installed_only {
+            println!("{:>20} {}", fetch.on_cyan().black(), "is not installed".red());
         }
     }
 
