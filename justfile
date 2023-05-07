@@ -6,6 +6,18 @@ alias b := build
 alias i := install
 alias u := uninstall
 
+# Build release version
+build: check-cargo
+    cargo build --release
+
+# Install manually
+install: build
+    sudo cp target/release/ffbir /usr/bin/
+
+# Remove manual installation
+uninstall:
+    sudo rm /usr/bin/ffbir
+
 # Check if cargo is installed
 check-cargo:
     which cargo
@@ -14,9 +26,12 @@ check-cargo:
 check-fpm:
     which fpm
 
-# Build release version
-build: check-cargo
-    cargo build --release
+# Package for all
+package-all:
+    -fpm -t rpm
+    -fpm -t deb
+    -fpm -t pacman
+    -fpm -t sh
 
 # Package rpm binary
 package-rpm: check-fpm build
@@ -33,11 +48,3 @@ package-pacman: check-fpm build
 # Package self-extracting install script
 package-sh: check-fpm build
     fpm -t sh
-
-# Install manually
-install: build
-    sudo cp target/release/ffbir /usr/bin/
-
-# Remove manual installation
-uninstall:
-    sudo rm /usr/bin/ffbir
