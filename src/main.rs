@@ -76,24 +76,25 @@ fn main() {
             }
         }
         Some(path) => {
-            if !path.exists() {
-                println!("Fetches file not found!");
+            let lines = read_lines(path).unwrap_or_else(|error| {
+                eprintln!("Failed to read file: {}", error);
                 std::process::exit(1);
-            }
-            if let Ok(lines) = read_lines(path.as_path()) {
-                for line in lines {
-                    if let Ok(fetch) = line {
-                        if fetch_installed(&fetch) {
-                            println!("{:>20} {}", fetch.on_cyan().black(), "is installed".green());
-                            fetch_count += 1;
-                        } else if !args.installed_only {
-                            println!(
-                                "{:>20} {}",
-                                fetch.on_cyan().black(),
-                                "is not installed".red()
-                            );
-                        }
-                    }
+            });
+            for line in lines {
+                let fetch = line.unwrap_or_else(|error| {
+                    eprintln!("Failed to read line: {}", error);
+                    std::process::exit(1);
+                });
+
+                if fetch_installed(&fetch) {
+                    println!("{:>20} {}", fetch.on_cyan().black(), "is installed".green());
+                    fetch_count += 1;
+                } else if !args.installed_only {
+                    println!(
+                        "{:>20} {}",
+                        fetch.on_cyan().black(),
+                        "is not installed".red()
+                    );
                 }
             }
         }
