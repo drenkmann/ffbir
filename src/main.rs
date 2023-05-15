@@ -60,42 +60,41 @@ fn main() {
 
     println!("{}\n", "### FetchFetch but in Rust ###".green().bold());
 
-    match args.fetches_file {
-        None => {
-            for fetch in &FETCHES {
-                if fetch_installed(fetch) {
-                    println!("{:>20} {}", fetch.on_cyan().black(), "is installed".green());
-                    fetch_count += 1;
-                } else if !args.installed_only {
-                    println!(
-                        "{:>20} {}",
-                        fetch.on_cyan().black(),
-                        "is not installed".red()
-                    );
-                }
+    if args.fetches_file.is_none() {
+        for fetch in &FETCHES {
+            if fetch_installed(fetch) {
+                println!("{:>20} {}", fetch.on_cyan().black(), "is installed".green());
+                fetch_count += 1;
+            } else if !args.installed_only {
+                println!(
+                    "{:>20} {}",
+                    fetch.on_cyan().black(),
+                    "is not installed".red()
+                );
             }
         }
-        Some(path) => {
-            let lines = read_lines(path).unwrap_or_else(|error| {
-                eprintln!("Failed to read file: {}", error);
+    } else {
+        let path = args.fetches_file.unwrap();
+
+        let lines = read_lines(path).unwrap_or_else(|error| {
+            eprintln!("Failed to read file: {}", error);
+            std::process::exit(1);
+        });
+        for line in lines {
+            let fetch = line.unwrap_or_else(|error| {
+                eprintln!("Failed to read line: {}", error);
                 std::process::exit(1);
             });
-            for line in lines {
-                let fetch = line.unwrap_or_else(|error| {
-                    eprintln!("Failed to read line: {}", error);
-                    std::process::exit(1);
-                });
 
-                if fetch_installed(&fetch) {
-                    println!("{:>20} {}", fetch.on_cyan().black(), "is installed".green());
-                    fetch_count += 1;
-                } else if !args.installed_only {
-                    println!(
-                        "{:>20} {}",
-                        fetch.on_cyan().black(),
-                        "is not installed".red()
-                    );
-                }
+            if fetch_installed(&fetch) {
+                println!("{:>20} {}", fetch.on_cyan().black(), "is installed".green());
+                fetch_count += 1;
+            } else if !args.installed_only {
+                println!(
+                    "{:>20} {}",
+                    fetch.on_cyan().black(),
+                    "is not installed".red()
+                );
             }
         }
     }
