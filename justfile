@@ -2,29 +2,34 @@
 default:
     @just --list --unsorted
 
-alias b := build
-alias i := install
-alias u := uninstall
-
 # Build release version
 build: check-cargo
+    @echo "Building ffbir..."
     cargo build --release
 
 # Install manually
 install: build
-    sudo cp target/release/ffbir /usr/bin/
+    @echo "Installing..."
+    @sudo cp target/release/ffbir /usr/bin/ > /dev/null
+    @echo ""
+    @echo "Successfully installed ffbir into /usr/bin/"
 
 # Remove manual installation
 uninstall:
-    sudo rm /usr/bin/ffbir
+    @echo "Uninstalling..."
+    @sudo rm /usr/bin/ffbir > /dev/null
+    @echo ""
+    @echo "Successfully uninstalled."
 
 # Check if cargo is installed
 check-cargo:
-    which cargo
+    @which cargo > /dev/null
+    @echo "Cargo found."
 
 # Check if fpm is installed
 check-fpm:
-    which fpm
+    @which fpm > /dev/null
+    @echo "FPM found"
 
 # Package for all
 package-all:
