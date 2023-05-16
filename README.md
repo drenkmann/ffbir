@@ -10,66 +10,38 @@
 </div>
 </div>
 
-## 1 - Requirements
-`rust` - building ffbir
+## Installation
+You can either download the latest [release](https://github.com/underthefoxtree/ffbir/releases) or build from source (recommended).
 
-`fpm` (optional) - packaging the binary
+## Install from source (recommended)
 
-`just` (optional) - easy installation process
+### Requirements
+[`rust`](https://www.rust-lang.org/) - building ffbir
 
-## 2 - Install from Binary
-Just grab the latest [release](https://github.com/underthefoxtree/ffbir/releases)
+[`just`](https://github.com/casey/just) (optional) - easy installation process
 
-## 2 - Just Install (from source)
-Install using [just](https://github.com/casey/just)
+### Install with just
 ```bash
 $ just install
 ```
 
-## 2 - Other Install Options (from source)
-### 2.1 - Build
+### Install manually
 ```bash
+# Build
 $ cargo build --release
-```
-
-### 2.2 - Install
-There are multiple options for installation.
-#### Manual
-```bash
+# Install
 $ sudo cp target/release/ffbir /usr/bin
 ```
 
-#### Using Package Manager
-Build the package
-```bash
-# Red Hat based systems
-$ fpm -t rpm
+## Uninstall
+If installed using a binary from the [releases](https://github.com/underthefoxtree/ffbir/releases) page, use your package manager to uninstall.
 
-# Debian/Ubuntu based systems
-$ fpm -t deb
-
-# Arch based systems
-$ fpm -t pacman
-
-# Universal self-extracting script
-$ fpm -t sh
-```
-Install it using your package manager.
-
-## 3 - Just Uninstall
-ONLY use this if you installed using just.
+### Uninstall with just
 ```bash
 $ just uninstall
 ```
 
-## 3 - Other Uninstall Options
-#### Package Manager Installation
-Use this if you installed using fpm from source or from releases.
-
-Use your package manager to uninstall.
-
-#### Manual Installation
-Use this if you built and installed manually.
+### Uninstall manually
 ```bash
 $ sudo rm /usr/bin/ffbir
 ```
